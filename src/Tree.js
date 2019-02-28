@@ -1,11 +1,57 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 class Tree extends Component {
-  static defaultProps = { sort: null };
+  static propTypes = {
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        children: PropTypes.array
+      })
+    ).isRequired,
+    sort: PropTypes.func,
+    collapse: PropTypes.bool
+  };
+
+  static defaultProps = { sort: null, collapse: false };
+
+  state = {};
+
+  componentDidMount() {
+    const { items } = this.props;
+
+    this.flattenItems(items, null);
+  }
+
+  flattenItems = (items, parent) => {
+    const { collapse } = this.props;
+    items.forEach(({ text, children }) => {
+      if (children && children.length) {
+        this.setState(
+          {
+            [text]: {
+              children: children.length,
+              collapsed: collapse,
+              parent
+            }
+          },
+          () => this.flattenItems(children, text)
+        );
+
+        return;
+      }
+      this.setState({
+        [text]: {
+          children: 0,
+          collapsed: collapse,
+          parent
+        }
+      });
+    });
+  };
 
   renderItems = (items, parent) => {
-    const { sort, handleItemClick } = this.props;
+    const { sort, collapse } = this.props;
     const keys = Object.keys(items);
     let filteredItems = keys.filter(key => items[key].parent === parent);
 
@@ -20,14 +66,16 @@ class Tree extends Component {
             <li key={item}>
               <div
                 onClick={() =>
-                  handleItemClick({
+                  collapse &&
+                  this.handleClick({
                     items,
                     item,
                     collapsed: items[item].collapsed
                   })
                 }
                 onKeyPress={() =>
-                  handleItemClick({
+                  collapse &&
+                  this.handleClick({
                     items,
                     item,
                     collapsed: items[item].collapsed
@@ -48,10 +96,16 @@ class Tree extends Component {
     );
   };
 
+  handleClick = ({ item, collapsed }) => {
+    this.setState(prevState => ({
+      [item]: { ...prevState[item], collapsed: !collapsed }
+    }));
+  };
+
   render() {
     const { items } = this.props;
 
-    return this.renderItems(items, null);
+    return items ? this.renderItems(this.state, null) : null;
   }
 }
 

@@ -6,15 +6,11 @@ import library from './treeData';
 
 function App() {
   return (
-    <Collapsible items={library}>
-      {({ items, handleItemClick }) => (
+    <Collapsible>
+      {({ collapse }) => (
         <Sortable>
           {({ alphabetically }) => (
-            <Tree
-              items={items}
-              sort={alphabetically}
-              handleItemClick={handleItemClick}
-            />
+            <Tree collapse={collapse} items={library} sort={alphabetically} />
           )}
         </Sortable>
       )}

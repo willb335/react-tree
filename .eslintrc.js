@@ -3,8 +3,8 @@ module.exports = {
   env: { browser: true, node: true },
   extends: ['react-app', 'airbnb', 'prettier'],
   rules: {
-    'react/prop-types': 0,
+    'react/prop-types': 2,
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
-    'no-console': 0
+    'no-console': 1
   }
 };
