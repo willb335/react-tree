@@ -62,7 +62,7 @@ class Tree extends React.Component<Props, State> {
   };
 
   renderItems = (items: Flattened, parent: string | null) => {
-    const { sort, collapse } = this.props;
+    const { sort } = this.props;
     const keys = Object.keys(items);
     let filteredItems = keys.filter(
       (key: string) => items[key].parent === parent
@@ -73,26 +73,15 @@ class Tree extends React.Component<Props, State> {
     }
 
     return (
-      <ul style={{ cursor: 'pointer', paddingRight: 4 }}>
+      <ul>
         {filteredItems.map((item: string) => {
+          const collapsed = items[item].collapsed;
           return (
             <li key={item}>
               <div
                 className="folder"
-                onClick={() =>
-                  collapse &&
-                  this.handleClick({
-                    item,
-                    collapsed: items[item].collapsed
-                  })
-                }
-                onKeyPress={() =>
-                  collapse &&
-                  this.handleClick({
-                    item,
-                    collapsed: items[item].collapsed
-                  })
-                }
+                onClick={() => this.handleClick({ item, collapsed })}
+                onKeyPress={() => this.handleClick({ item, collapsed })}
                 role="button"
                 tabIndex={0}
               >
@@ -108,10 +97,12 @@ class Tree extends React.Component<Props, State> {
     );
   };
 
-  handleClick = ({ item, collapsed }: { item: string; collapsed: Boolean }) => {
-    this.setState(prevState => ({
-      [item]: { ...prevState[item], collapsed: !collapsed }
-    }));
+  handleClick = ({ item, collapsed }: { item: string; collapsed: boolean }) => {
+    const { collapse } = this.props;
+    collapse &&
+      this.setState(prevState => ({
+        [item]: { ...prevState[item], collapsed: !collapsed }
+      }));
   };
 
   render() {
