@@ -1,11 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 
-class Sortable extends React.Component {
-  static propTypes = { children: PropTypes.func.isRequired };
+type Props = {
+  children: (object: any) => ReactNode;
+};
 
-  sortAlphabetically = items => {
-    return items.sort((a, b) => {
+class Sortable extends React.Component<Props> {
+  sortAlphabetically = (items: string[]) => {
+    return items.sort((a: string, b: string) => {
       if (a.toLowerCase() < b.toLowerCase()) return -1;
       if (a.toLowerCase() > b.toLowerCase()) return 1;
 

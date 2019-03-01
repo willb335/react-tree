@@ -5,3 +5,15 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+:focus {
+  outline: none;
+  border-radius: 4px;
+  background-color: burlywood;
+  font-weight: bold;
+}
+
+.folder {
+  cursor: pointer;
+  padding-left: 7px;
+}
