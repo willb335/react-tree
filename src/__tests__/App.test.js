@@ -3,7 +3,6 @@ import { render, cleanup, fireEvent } from 'react-testing-library';
 import 'jest-dom/extend-expect';
 import Tree from '../Tree';
 import Sortable from '../Sortable';
-import Collapsible from '../Collapsible';
 import library from '../treeData';
 
 afterEach(cleanup);
@@ -18,15 +17,11 @@ test('loads and displays content', () => {
 
 test('loads and displays collapsed content', () => {
   const { getByText, queryByText } = render(
-    <Collapsible>
-      {({ collapse }) => (
-        <Sortable>
-          {({ alphabetically }) => (
-            <Tree collapse={collapse} items={library} sort={alphabetically} />
-          )}
-        </Sortable>
+    <Sortable>
+      {({ alphabetically }) => (
+        <Tree collapse items={library} sort={alphabetically} />
       )}
-    </Collapsible>
+    </Sortable>
   );
 
   expect(getByText('Books')).toHaveTextContent('Books');
